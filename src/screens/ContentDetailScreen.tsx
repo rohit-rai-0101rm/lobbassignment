@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Share,
+  SafeAreaView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useApiCall } from '../hooks/useApiCall';
@@ -71,52 +72,62 @@ const ContentDetailScreen = () => {
   const cleanText = paragraphs.join('\n\n');
 
   return (
-    <ScrollView style={styles.container}>
-      {/* Fullscreen Image */}
-      <View style={styles.imageWrapper}>
-        <Image source={{ uri: content.mainImage }} style={styles.mainImage} />
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.closeText}>X</Text>
-        </TouchableOpacity>
-        <Text style={styles.overlayText}>Only I Can Call My Dream Stupid.</Text>
-      </View>
+    <SafeAreaView style={styles.safeArea}>
+      {/* Fixed close button */}
+      <TouchableOpacity
+        style={styles.fixedCloseButton}
+        onPress={() => navigation.goBack()}
+      >
+        <Text style={styles.closeText}>X</Text>
+      </TouchableOpacity>
 
-      {/* Card Section */}
-      <View style={styles.card}>
-        <View style={styles.row}>
-          <Image source={{ uri: content.logo }} style={styles.logo} />
-          <View style={styles.meta}>
-            <Text style={styles.title}>{content.title}</Text>
-            <Text style={styles.subtitle}>
-              {content.subTitle || 'Set sail for One Piece!'}
-            </Text>
-          </View>
-          <View style={styles.actions}>
-            <TouchableOpacity style={styles.refreshBtn} onPress={refetch}>
-              <Text style={styles.refreshText}>REFRESH</Text>
-            </TouchableOpacity>
-            <Text style={styles.inAppText}>In-App Purchase</Text>
-          </View>
+      <ScrollView style={styles.container}>
+        {/* Fullscreen Image */}
+        <View style={styles.imageWrapper}>
+          <Image source={{ uri: content.mainImage }} style={styles.mainImage} />
+          <Text style={styles.overlayText}>
+            Only I Can Call My Dream Stupid.
+          </Text>
         </View>
 
-        <Text style={styles.description}>{cleanText}</Text>
-      </View>
+        {/* Card Section */}
+        <View style={styles.card}>
+          <View style={styles.row}>
+            <Image source={{ uri: content.logo }} style={styles.logo} />
+            <View style={styles.meta}>
+              <Text style={styles.title}>{content.title}</Text>
+              <Text style={styles.subtitle}>
+                {content.subTitle || 'Set sail for One Piece!'}
+              </Text>
+            </View>
+            <View style={styles.actions}>
+              <TouchableOpacity style={styles.refreshBtn} onPress={refetch}>
+                <Text style={styles.refreshText}>REFRESH</Text>
+              </TouchableOpacity>
+              <Text style={styles.inAppText}>In-App Purchase</Text>
+            </View>
+          </View>
 
-      {/* Share Button */}
-      <TouchableOpacity
-        style={styles.shareButton}
-        onPress={() => handleShare(content)}
-      >
-        <Text style={styles.shareButtonText}>Share</Text>
-      </TouchableOpacity>
-    </ScrollView>
+          <Text style={styles.description}>{cleanText}</Text>
+        </View>
+
+        {/* Share Button */}
+        <TouchableOpacity
+          style={styles.shareButton}
+          onPress={() => handleShare(content)}
+        >
+          <Text style={styles.shareButtonText}>Share</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   container: { flex: 1, backgroundColor: '#fff' },
   centered: {
     flex: 1,
@@ -124,17 +135,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 24,
   },
-  imageWrapper: { position: 'relative' },
-  mainImage: { width: '100%', height: 300 },
-  closeButton: {
+  fixedCloseButton: {
     position: 'absolute',
     top: 40,
     right: 20,
     backgroundColor: '#0007',
     padding: 6,
     borderRadius: 14,
+    zIndex: 999,
   },
   closeText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
+  imageWrapper: { position: 'relative' },
+  mainImage: { width: '100%', height: 300 },
   overlayText: {
     position: 'absolute',
     bottom: 16,
@@ -184,16 +196,16 @@ const styles = StyleSheet.create({
   },
   shareButton: {
     backgroundColor: '#3b82f6',
-    marginHorizontal: 16,
-    marginBottom: 24,
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
+    marginVertical: 20,
+    alignSelf: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    borderRadius: 20,
   },
   shareButtonText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 14,
   },
 });
 
