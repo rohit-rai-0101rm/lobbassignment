@@ -173,20 +173,25 @@ const styles = StyleSheet.create({
   title: { fontSize: 18, fontWeight: 'bold' },
   subtitle: { color: 'gray', fontSize: 14 },
   actions: {
-    alignItems: 'flex-end',
+    alignItems: 'center',
     justifyContent: 'center',
   },
   refreshBtn: {
-    backgroundColor: '#ddd',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 8,
+    backgroundColor: '#E0E0E0',
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    borderRadius: 20,
   },
-  refreshText: { fontWeight: 'bold', fontSize: 12, color: '#3b82f6' },
+  refreshText: {
+    color: '#007AFF',
+    fontSize: 13,
+    fontWeight: '600',
+  },
   inAppText: {
     marginTop: 4,
     fontSize: 11,
     color: '#999',
+    textAlign: 'center',
   },
   description: {
     marginTop: 12,
@@ -196,10 +201,11 @@ const styles = StyleSheet.create({
   },
   shareButton: {
     backgroundColor: '#3b82f6',
-    marginVertical: 20,
+    marginTop: 24,
+    marginBottom: 24,
     alignSelf: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
     borderRadius: 20,
   },
   shareButtonText: {

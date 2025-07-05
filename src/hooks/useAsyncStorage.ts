@@ -5,7 +5,6 @@ export const useAsyncStorage = <T>(key: string, initialValue: T) => {
     const [storedValue, setStoredValue] = useState<T>(initialValue);
     const [loading, setLoading] = useState(true);
 
-    // Load value on mount
     useEffect(() => {
         const load = async () => {
             try {
@@ -14,7 +13,7 @@ export const useAsyncStorage = <T>(key: string, initialValue: T) => {
                     setStoredValue(JSON.parse(raw));
                 }
             } catch (e) {
-                console.error(`Failed to load ${key} from AsyncStorage`, e);
+                console.error(`❌ Failed to load ${key} from AsyncStorage`, e);
             } finally {
                 setLoading(false);
             }
@@ -28,7 +27,7 @@ export const useAsyncStorage = <T>(key: string, initialValue: T) => {
             await AsyncStorage.setItem(key, JSON.stringify(value));
             setStoredValue(value);
         } catch (e) {
-            console.error(`Failed to save ${key}`, e);
+            console.error(`❌ Failed to save ${key}`, e);
         }
     };
 
@@ -37,7 +36,7 @@ export const useAsyncStorage = <T>(key: string, initialValue: T) => {
             await AsyncStorage.removeItem(key);
             setStoredValue(initialValue);
         } catch (e) {
-            console.error(`Failed to remove ${key}`, e);
+            console.error(`❌ Failed to remove ${key}`, e);
         }
     };
 

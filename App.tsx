@@ -14,24 +14,14 @@ const App = () => {
   } = useAsyncStorage<string | null>('USER_AUTH_TOKEN', null);
 
   useEffect(() => {
-    console.log(
-      '🌀 useEffect triggered | token:',
-      token,
-      '| loading:',
-      tokenLoading,
-    );
-
     const fetchAndSetToken = async () => {
       try {
         if (!token) {
-          console.log('📡 Fetching new token...');
-          const newToken = await generateToken(); // Generate new token
-          await saveToken(newToken); // Save to AsyncStorage
-          setAuthToken(newToken); // Set in axios headers
-          console.log('✅ New token saved and set:', newToken);
+          const newToken = await generateToken();
+          await saveToken(newToken);
+          setAuthToken(newToken);
         } else {
-          setAuthToken(token); // Set existing token
-          console.log('🗂️ Token already exists. Set in headers:', token);
+          setAuthToken(token);
         }
       } catch (error) {
         console.error('❌ Token setup failed:', error);
@@ -41,9 +31,7 @@ const App = () => {
     if (!tokenLoading) {
       fetchAndSetToken();
     }
-  }, [token, tokenLoading]); // ✅ include both as dependencies
-
-  console.log('🌱 Render | token:', token, '| loading:', tokenLoading);
+  }, [token, tokenLoading]);
 
   if (tokenLoading) {
     return (
