@@ -6,11 +6,14 @@ import {
   Image,
   ScrollView,
   Button,
+  TouchableOpacity,
 } from 'react-native';
 import { getContent } from '../api/contentApi';
 import { useApiCall } from '../hooks/useApiCall';
+import { useNavigation } from '@react-navigation/native';
 
 const ContentScreen = () => {
+  const navigation = useNavigation();
   const {
     data: content,
     loading,
@@ -71,10 +74,14 @@ const ContentScreen = () => {
 
   return (
     <ScrollView style={{ padding: 16 }}>
-      <Image
-        source={{ uri: content.mainImage }}
-        style={{ height: 250, borderRadius: 12 }}
-      />
+      <TouchableOpacity
+        onPress={() => navigation.navigate('contentdetails', { content })}
+      >
+        <Image
+          source={{ uri: content.mainImage }}
+          style={{ height: 250, borderRadius: 12 }}
+        />
+      </TouchableOpacity>
       <Text
         style={{
           fontSize: 24,
