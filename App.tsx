@@ -7,6 +7,7 @@ import { setAuthToken } from './src/api/apiClient';
 import { useAsyncStorage } from './src/hooks/useAsyncStorage';
 
 const App = () => {
+  // Load or persist the auth token from AsyncStorage
   const {
     value: token,
     save: saveToken,
@@ -14,13 +15,21 @@ const App = () => {
   } = useAsyncStorage<string | null>('USER_AUTH_TOKEN', null);
 
   useEffect(() => {
+    /**
+     * Handles token retrieval and setup.
+     * - If no token exists, generate a new one via API.
+     * - Save the new token into AsyncStorage.
+     * - Always set the token into axios headers for API requests.
+     */
     const fetchAndSetToken = async () => {
       try {
         if (!token) {
+          // No token stored → generate a new one from API
           const newToken = await generateToken();
           await saveToken(newToken);
           setAuthToken(newToken);
         } else {
+          // Token already exists → simply set it in axios headers
           setAuthToken(token);
         }
       } catch (error) {
@@ -28,11 +37,13 @@ const App = () => {
       }
     };
 
+    // Only run once AsyncStorage is done loading
     if (!tokenLoading) {
       fetchAndSetToken();
     }
   }, [token, tokenLoading]);
 
+  // Show loading indicator while reading token from AsyncStorage
   if (tokenLoading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -41,6 +52,7 @@ const App = () => {
     );
   }
 
+  // AppNavigator holds all app screens once token logic is settled
   return <AppNavigator />;
 };
 
