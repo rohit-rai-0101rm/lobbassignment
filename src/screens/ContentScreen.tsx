@@ -18,6 +18,8 @@ const { width } = Dimensions.get('window');
 
 const ContentScreen = () => {
   const navigation = useNavigation();
+
+  // Call API to fetch content data
   const {
     data: content,
     loading,
@@ -25,6 +27,7 @@ const ContentScreen = () => {
     refetch,
   } = useApiCall({ call: getContent });
 
+  // Format today's date nicely
   const today = new Date();
   const formattedDate = today.toLocaleDateString('en-GB', {
     weekday: 'long',
@@ -32,6 +35,7 @@ const ContentScreen = () => {
     month: 'long',
   });
 
+  // Show loading spinner
   if (loading) {
     return (
       <View style={styles.centered}>
@@ -41,6 +45,7 @@ const ContentScreen = () => {
     );
   }
 
+  // Show error state with refresh button
   if (error || !content) {
     return (
       <View style={styles.centered}>
@@ -56,7 +61,7 @@ const ContentScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
-      {/* Header with date and VS */}
+      {/* Header with date and VS badge */}
       <View style={styles.header}>
         <View>
           <Text style={styles.headerSub}>{formattedDate.toUpperCase()}</Text>
@@ -67,22 +72,27 @@ const ContentScreen = () => {
         </View>
       </View>
 
-      {/* Whole Card (Image + Bottom Details) */}
+      {/* Card clickable to navigate to details screen */}
       <TouchableOpacity
         onPress={() => navigation.navigate('contentdetails', { content })}
         activeOpacity={0.9}
         style={styles.cardContainer}
       >
-        {/* Hero Image */}
+        {/* Main hero image */}
         <Image source={{ uri: content.mainImage }} style={styles.mainImage} />
 
-        {/* Bottom Details */}
+        {/* Bottom card with logo and details */}
         <View style={styles.bottomCard}>
+          {/* Logo image */}
           <Image source={{ uri: content.logo }} style={styles.logo} />
+
+          {/* Title and subtitle */}
           <View style={styles.details}>
             <Text style={styles.title}>{content.title}</Text>
             <Text style={styles.subtitle}>{content.subTitle}</Text>
           </View>
+
+          {/* Actions: Refresh button and in-app label */}
           <View style={styles.actions}>
             <Pressable style={styles.refreshButton} onPress={refetch}>
               <Text style={styles.refreshText}>REFRESH</Text>

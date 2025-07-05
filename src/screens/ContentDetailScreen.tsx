@@ -17,6 +17,7 @@ import { getContent } from '../api/contentApi';
 const ContentDetailScreen = () => {
   const navigation = useNavigation();
 
+  // Fetch content data using a custom API hook
   const {
     data: content,
     loading,
@@ -24,6 +25,10 @@ const ContentDetailScreen = () => {
     refetch,
   } = useApiCall({ call: getContent });
 
+  /**
+   * Handles native share functionality.
+   * Composes a message with title, subtitle, and image URL.
+   */
   const handleShare = async content => {
     try {
       const result = await Share.share({
@@ -41,6 +46,7 @@ const ContentDetailScreen = () => {
     }
   };
 
+  // Display loading spinner while fetching data
   if (loading) {
     return (
       <View style={styles.centered}>
@@ -50,6 +56,7 @@ const ContentDetailScreen = () => {
     );
   }
 
+  // Display error state with retry button
   if (error || !content) {
     return (
       <View style={styles.centered}>
@@ -63,7 +70,7 @@ const ContentDetailScreen = () => {
     );
   }
 
-  // Clean HTML and split into paragraphs
+  // Clean HTML tags and format content text
   const paragraphs = content.text
     .split(/<\/p>/i)
     .map(p => p.replace(/<\/?[^>]+(>|$)/g, '').trim())
@@ -73,7 +80,7 @@ const ContentDetailScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      {/* Fixed close button */}
+      {/* Fixed-position close (X) button in top-right corner */}
       <TouchableOpacity
         style={styles.fixedCloseButton}
         onPress={() => navigation.goBack()}
@@ -82,7 +89,7 @@ const ContentDetailScreen = () => {
       </TouchableOpacity>
 
       <ScrollView style={styles.container}>
-        {/* Fullscreen Image */}
+        {/* Fullscreen image at the top */}
         <View style={styles.imageWrapper}>
           <Image source={{ uri: content.mainImage }} style={styles.mainImage} />
           <Text style={styles.overlayText}>
@@ -90,16 +97,21 @@ const ContentDetailScreen = () => {
           </Text>
         </View>
 
-        {/* Card Section */}
+        {/* Card-style content details */}
         <View style={styles.card}>
           <View style={styles.row}>
+            {/* Logo image */}
             <Image source={{ uri: content.logo }} style={styles.logo} />
+
+            {/* Title and subtitle */}
             <View style={styles.meta}>
               <Text style={styles.title}>{content.title}</Text>
               <Text style={styles.subtitle}>
                 {content.subTitle || 'Set sail for One Piece!'}
               </Text>
             </View>
+
+            {/* Refresh + in-app purchase label */}
             <View style={styles.actions}>
               <TouchableOpacity style={styles.refreshBtn} onPress={refetch}>
                 <Text style={styles.refreshText}>REFRESH</Text>
@@ -108,10 +120,11 @@ const ContentDetailScreen = () => {
             </View>
           </View>
 
+          {/* Cleaned content description */}
           <Text style={styles.description}>{cleanText}</Text>
         </View>
 
-        {/* Share Button */}
+        {/* Share button at the bottom */}
         <TouchableOpacity
           style={styles.shareButton}
           onPress={() => handleShare(content)}
