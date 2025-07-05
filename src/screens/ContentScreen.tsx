@@ -67,28 +67,30 @@ const ContentScreen = () => {
         </View>
       </View>
 
-      {/* Hero Image */}
+      {/* Whole Card (Image + Bottom Details) */}
       <TouchableOpacity
         onPress={() => navigation.navigate('contentdetails', { content })}
-        style={styles.heroWrapper}
-        activeOpacity={0.8}
+        activeOpacity={0.9}
+        style={styles.cardContainer}
       >
+        {/* Hero Image */}
         <Image source={{ uri: content.mainImage }} style={styles.mainImage} />
-      </TouchableOpacity>
 
-      {/* Floating Card */}
-      <View style={styles.card}>
-        <Image source={{ uri: content.logo }} style={styles.logo} />
-        <View style={{ flex: 1 }}>
-          <Text style={styles.title}>{content.title}</Text>
-          <Text style={styles.subtitle}>{content.subTitle}</Text>
+        {/* Bottom Details */}
+        <View style={styles.bottomCard}>
+          <Image source={{ uri: content.logo }} style={styles.logo} />
+          <View style={styles.details}>
+            <Text style={styles.title}>{content.title}</Text>
+            <Text style={styles.subtitle}>{content.subTitle}</Text>
+          </View>
+          <View style={styles.actions}>
+            <Pressable style={styles.refreshButton} onPress={refetch}>
+              <Text style={styles.refreshText}>REFRESH</Text>
+            </Pressable>
+            <Text style={styles.inAppText}>In-App Purchase</Text>
+          </View>
         </View>
-        <Pressable style={styles.refreshButton} onPress={refetch}>
-          <Text style={styles.refreshText}>REFRESH</Text>
-        </Pressable>
-      </View>
-
-      <Text style={styles.inAppText}>In-App Purchase</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -109,7 +111,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   headerSub: {
     fontSize: 12,
@@ -134,10 +136,11 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#333',
   },
-  heroWrapper: {
+  cardContainer: {
+    width: '100%',
     borderRadius: 24,
     overflow: 'hidden',
-    marginBottom: 20,
+    backgroundColor: 'white',
     shadowColor: '#000',
     shadowOpacity: 0.15,
     shadowRadius: 10,
@@ -147,35 +150,43 @@ const styles = StyleSheet.create({
   mainImage: {
     width: '100%',
     height: 260,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
     resizeMode: 'cover',
   },
-  card: {
+  bottomCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
     padding: 16,
-    borderRadius: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 5,
+    backgroundColor: '#fff',
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
   },
   logo: {
-    width: 60,
-    height: 60,
-    marginRight: 12,
+    width: 50,
+    height: 50,
     borderRadius: 12,
+    marginRight: 12,
+  },
+  details: {
+    flex: 1,
+    justifyContent: 'center',
   },
   title: {
-    fontSize: 18,
-    fontWeight: '800',
+    fontSize: 16,
+    fontWeight: '700',
     color: '#222',
   },
   subtitle: {
     fontSize: 13,
     color: '#666',
     marginTop: 2,
+  },
+  actions: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
   },
   refreshButton: {
     backgroundColor: '#e2e8f0',
@@ -189,10 +200,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   inAppText: {
-    textAlign: 'right',
-    marginTop: 8,
-    color: '#999',
+    marginTop: 4,
     fontSize: 11,
+    color: '#999',
   },
 });
 
