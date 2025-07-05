@@ -1,14 +1,73 @@
 import React from 'react';
-import { View, Text, ActivityIndicator, Image, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  Button,
+} from 'react-native';
 import { getContent } from '../api/contentApi';
 import { useApiCall } from '../hooks/useApiCall';
 
 const ContentScreen = () => {
-  const { data: content, loading, error } = useApiCall({ call: getContent });
+  const {
+    data: content,
+    loading,
+    error,
+    refetch,
+  } = useApiCall({
+    call: getContent,
+  });
 
-  if (loading) return <ActivityIndicator size="large" />;
-  if (error) return <Text>Error: {error.message}</Text>;
-  if (!content) return <Text>No content found</Text>;
+  if (loading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <ActivityIndicator size="large" />
+        <Text style={{ marginTop: 10 }}>Loading content...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: 20,
+        }}
+      >
+        <Text style={{ color: 'red', fontSize: 16, marginBottom: 12 }}>
+          ❌ Failed to fetch content
+        </Text>
+        <Button title="Try Again" onPress={refetch} />
+      </View>
+    );
+  }
+
+  if (!content) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: 20,
+        }}
+      >
+        <Text>No content found</Text>
+        <Button title="Refresh" onPress={refetch} />
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={{ padding: 16 }}>
@@ -16,11 +75,23 @@ const ContentScreen = () => {
         source={{ uri: content.mainImage }}
         style={{ height: 250, borderRadius: 12 }}
       />
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginVertical: 12 }}>
+      <Text
+        style={{
+          fontSize: 24,
+          fontWeight: 'bold',
+          marginVertical: 12,
+        }}
+      >
         {content.title}
       </Text>
       <Text style={{ fontSize: 16, color: 'gray' }}>{content.subTitle}</Text>
-      <Text style={{ marginTop: 16 }}>By {content.userName}</Text>
+      <Text style={{ marginTop: 16, fontStyle: 'italic' }}>
+        By {content.userName}
+      </Text>
+
+      <View style={{ marginTop: 24 }}>
+        <Button title="Refresh Content" onPress={refetch} />
+      </View>
     </ScrollView>
   );
 };
