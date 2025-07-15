@@ -5,6 +5,8 @@ import AppNavigator from './AppNavigator';
 import { generateToken } from './src/api/authApi';
 import { setAuthToken } from './src/api/apiClient';
 import { useAsyncStorage } from './src/hooks/useAsyncStorage';
+import { Provider } from 'react-redux';
+import { store } from './src/store/store';
 
 const App = () => {
   // Load or persist the auth token from AsyncStorage
@@ -53,7 +55,11 @@ const App = () => {
   }
 
   // AppNavigator holds all app screens once token logic is settled
-  return <AppNavigator />;
+  return (
+    <Provider store={store}>
+      <AppNavigator />
+    </Provider>
+  );
 };
 
 export default App;
