@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -18,6 +18,16 @@ const { width } = Dimensions.get('window');
 
 const ContentScreen = () => {
   const navigation = useNavigation();
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch('https://randomuser.me/api/?results=10');
+      const jsonData = await res.json();
+      setData(jsonData);
+    };
+    fetchData();
+  }, []);
 
   // Call API to fetch content data
   const {
